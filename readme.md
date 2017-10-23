@@ -25,8 +25,7 @@ sudo ldconfig
 
 sudo apt install libopenimageio*
 locate libopencv_highgui.so.2.4
+sudo rm (located dir)/libopencv_highgui.so.2.4
+
+sudo link /usr/lib/libopencv_highgui.so.3.2.0 (located dir )/libopencv_highgui.so.2.4
 ```
-sudo rm (dir that 'locate ..' return)/libopencv_highgui.so.2.4
-
-sudo link /usr/lib/libopencv_highgui.so.3.2.0 (dir that 'locate ..' return)/libopencv_highgui.so.2.4
-
