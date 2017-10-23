@@ -1,3 +1,5 @@
+## glsl shaders with epoxy loader,gtk3 as an engine, imageio/opencv for texture preprocessing 
+
 ## build :
 ```
 c++ t.c --target=arm-linux-gnu -std=c++11  `pkg-config --libs --cflags  gtk+-3.0 epoxy `  -o op -lOpenImageIO -lopencv_videoio
