@@ -1,4 +1,4 @@
-# glsl shaders with epoxy loader,gtk3 as an engine, imageio/opencv for texture preprocessing 
+glsl shaders , epoxy(linux) glsl handler , gtk+3 frontend , imageio/opencv for texture pre-processing 
 
 ## build :
 ```
