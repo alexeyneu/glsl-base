@@ -1,6 +1,8 @@
-glsl shaders  
-epoxy opengl pointers 
-gtk+3 frontend  
+tools of trade:
+glsl   
+epoxy opengl pointers
+ 
+gtk+3  
 
 ## build 
 ```
