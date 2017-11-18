@@ -1,13 +1,10 @@
-#include <OpenImageIO/imageio.h>
-#include <OpenImageIO/imagebuf.h>
-#include <OpenImageIO/imagebufalgo.h>
 #include <epoxy/gl.h>
 #include <gtk/gtk.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-OIIO_NAMESPACE_USING
-
+#include "libtarga.h"
+#include <locale.h>
 
 
 
@@ -68,15 +65,14 @@ else  discard;
 int bba;
 
 glm::mat4 yt,b,bc,bct;
-ImageSpec c;
-GLubyte  trr[1024*1024*4];
+
 
 
 GLuint gl_vao, gl_buffer, gl_program;
 GLuint vertexT,tpr,tpra;
 static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 {
-
+GLubyte  *trr;
 
   gtk_gl_area_make_current(GTK_GL_AREA(area));
 GLfloat t[1728]; 
@@ -85,6 +81,7 @@ GLfloat ttk[1727];
 
 GLfloat verts[1727];
 char wq[150],wk[150];
+ FILE *w=fopen("Untitled.obj","r");
  FILE *ww=fopen("Untitled.obj","r");
 do
 fscanf(w,"%s",wq);
@@ -117,7 +114,7 @@ setlocale(LC_NUMERIC, "C");
 do
 {
 fscanf(w,"%[^\n]%*c",wq);
-
+if(feof(w)) break;
 sscanf(wq,"f %d/%d/%d %d/%d/%d %d/%d/%d ", &bbr,&bbu,&bbw,&ab,&abu,&abw,&cbr,&cbu,&cbw);
 
 fseek(ww,pv,SEEK_SET);
@@ -179,7 +176,7 @@ bbp+=2;
 while (1);
 bba=(bbh)/3;
 
- 
+   
 b=glm::lookAt(glm::vec3(-1.2484,0.483,1.84384), glm::vec3(-0.3801, -0.4183,-3.15),glm::vec3( 0., 0.2,-00.));
 yt=glm::perspective(45., 1., 1.2, 300.);
 bct=b*glm::mat4(1.);
@@ -191,18 +188,9 @@ bc=glm::transpose(glm::inverse(bct));
 //b=glm::lookAt(glm::vec3(0., 0.,-1.),glm::vec3( 0., 0., 0.),glm::vec3( 0.,025.,-1.));
 //yt=yt*b;
 
-
-c.width=1024;;
-c.height=1024;;
-
-c.nchannels=4;
-c.x=0;
-c.y=0;
-c.format=TypeDesc::UINT8;
-ImageBuf k(c,trr);;
-ImageBuf h("161208ap5410_fpx.jpg");
-ImageBufAlgo::flip(h,h);
-k.copy_pixels(h);
+unsigned char* targaimage;
+ int wdt=512, hgt=512;
+ trr = (unsigned char*)tga_load("161208ap5410_fpx.tga", &wdt, &hgt, TGA_TRUECOLOR_32); 
 
 
   GLuint frag_shader, vert_shader;
@@ -212,7 +200,7 @@ k.copy_pixels(h);
 
   glShaderSource(frag_shader, 1, &frag_src, NULL);
   glShaderSource(vert_shader, 1, &vert_src, NULL);
-
+ 
   glCompileShader(frag_shader);
   glCompileShader(vert_shader);
 
@@ -251,13 +239,13 @@ glBufferData(GL_ARRAY_BUFFER, sizeof(float)*bbp, t, GL_STATIC_DRAW);
 
 glBindVertexArray(0);
 
-//glGenTextures(1, &vertexT);
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, vertexT);  
+glGenTextures(1, &vertexT);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, vertexT);  
 
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA,  GL_UNSIGNED_BYTE,trr);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA,  GL_UNSIGNED_BYTE,trr);
 
   return TRUE;
 }
@@ -265,12 +253,6 @@ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA,  GL_UNSIGNED_BYT
 static gboolean render(GtkGLArea *area, GdkGLContext *context)
 {
  
-
-
-
-
-
-
   glUseProgram(gl_program);
 
  glUniformMatrix4fv(10, 1, 0, &b[0][0]);
