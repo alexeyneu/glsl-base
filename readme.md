@@ -1,7 +1,9 @@
 tools of trade:
+
 glsl   
 epoxy opengl pointers
- 
+
+libtarga 
 gtk+3  
 
 ## build 
