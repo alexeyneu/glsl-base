@@ -1,10 +1,8 @@
-tools of trade:
-
-glsl   
-epoxy opengl pointers
-
-libtarga
-gtk+3  
+	tools of trade:  
+	glsl  
+	epoxy opengl pointers  
+	libtarga  
+	gtk+3  
  - sys req opengl 3.3
 ## build 
 ```
