@@ -9,4 +9,9 @@ opengl 3.3
 ```
 c++ t.c libtarga.c  -std=c++11  `pkg-config --libs --cflags  gtk+-3.0 epoxy `  -o op
 ```
- 
+### dependencies
+parrot 3.9 had enouth after
+```
+sudo apt install libgtk-3-* libglm-*
+``` 
+![Screen1](screen\Screenshot 8.jpg)
