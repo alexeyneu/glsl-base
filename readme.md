@@ -14,4 +14,4 @@ parrot 3.9 had enouth after
 ```
 sudo apt install libgtk-3-* libglm-*
 ``` 
-![Screen1](screen\Screenshot%208.jpg)
+![Screen1](screen/Screenshot%208.jpg)
