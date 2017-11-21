@@ -1,3 +1,4 @@
+![Screen1](screen/Screenshot%208.jpg)
 ### tools of trade:  
   glsl  
   epoxy opengl pointers  
@@ -14,4 +15,3 @@ parrot 3.9 had enouth after
 ```
 sudo apt install libgtk-3-* libglm-*
 ``` 
-![Screen1](screen/Screenshot%208.jpg)
