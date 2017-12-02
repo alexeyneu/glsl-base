@@ -4,7 +4,7 @@
   epoxy opengl pointers  
   libtarga  
   gtk+3  
-  art of illusion soft used aslo
+  art of illusion soft used also
 ### sys req 
 opengl 3.3
 ## build 
