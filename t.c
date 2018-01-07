@@ -168,8 +168,7 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 		fseek(ww,pvc,SEEK_SET);
 		for(int c=0;c<cbw;c++)
 			fscanf(ww,"%[^\n]%*c",wq);
-		sscanf(&(*wq),"vn %f %f %f",  &ttk[bbh],  &ttk[bbh+1],  &ttk[bbh+2]);
-		wq;
+		sscanf(wq,"vn %f %f %f",  &ttk[bbh],  &ttk[bbh+1],  &ttk[bbh+2]);
 		bbh+=3;
 		bbp+=2;
 	}
