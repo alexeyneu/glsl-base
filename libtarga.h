@@ -44,13 +44,9 @@
 
 
 /* make sure these types reflect your system's type sizes. */
-#define byte    char
-#define int32   int
-#define int16   short
 
-#define ubyte   unsigned byte
-#define uint32  unsigned int32
-#define uint16  unsigned int16
+#define ubyte   unsigned char
+
 
 
 

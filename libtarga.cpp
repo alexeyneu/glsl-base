@@ -1,4 +1,5 @@
-
+#include <stdint.h>
+#include "libtarga.h"
 /**************************************************************************
  ** Simplified TARGA library for Intro to Graphics Classes
  **
@@ -49,10 +50,6 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#include "libtarga.h"
-
-
-
 
 #define TGA_IMG_NODATA             (0)
 #define TGA_IMG_UNC_PALETTED       (1)
@@ -100,20 +97,20 @@
 
 
 
-static uint32 TargaError;
+static unsigned int TargaError;
 
 
-static int16 ttohs( int16 val );
-static int16 htots( int16 val );
-static int32 ttohl( int32 val );
-static int32 htotl( int32 val );
+static int16_t ttohs( int16_t val );
+static int16_t htots( int16_t val );
+static int32_t ttohl( int32_t val );
+static int32_t htotl( int32_t val );
 
 
-static uint32 tga_get_pixel( FILE * tga, ubyte bytes_per_pix, 
+static uint32_t tga_get_pixel( FILE * tga, ubyte bytes_per_pix, 
                             ubyte * colormap, ubyte cmap_bytes_entry );
-static uint32 tga_convert_color( uint32 pixel, uint32 bpp_in, ubyte alphabits, uint32 format_out );
-static void tga_write_pixel_to_mem( ubyte * dat, ubyte img_spec, uint32 number, 
-                                   uint32 w, uint32 h, uint32 pixel, uint32 format );
+static uint32_t tga_convert_color( uint32_t pixel, uint32_t bpp_in, ubyte alphabits, uint32_t format_out );
+static void tga_write_pixel_to_mem( ubyte * dat, ubyte img_spec, uint32_t number, 
+                                   uint32_t w, uint32_t h, uint32_t pixel, uint32_t format );
 
 
 
@@ -206,13 +203,13 @@ void * tga_load( const char * filename,
     ubyte  idlen;               // length of the image_id string below.
     ubyte  cmap_type;           // paletted image <=> cmap_type
     ubyte  image_type;          // can be any of the IMG_TYPE constants above.
-    uint16 cmap_first;          // 
-    uint16 cmap_length;         // how long the colormap is
+    uint16_t cmap_first;          // 
+    uint16_t cmap_length;         // how long the colormap is
     ubyte  cmap_entry_size;     // how big a palette entry is.
-    uint16 img_spec_xorig;      // the x origin of the image in the image data.
-    uint16 img_spec_yorig;      // the y origin of the image in the image data.
-    uint16 img_spec_width;      // the width of the image.
-    uint16 img_spec_height;     // the height of the image.
+    uint16_t img_spec_xorig;      // the x origin of the image in the image data.
+    uint16_t img_spec_yorig;      // the y origin of the image in the image data.
+    uint16_t img_spec_width;      // the width of the image.
+    uint16_t img_spec_height;     // the height of the image.
     ubyte  img_spec_pix_depth;  // the depth of a pixel in the image.
     ubyte  img_spec_img_desc;   // the image descriptor.
 
@@ -229,27 +226,27 @@ void * tga_load( const char * filename,
 
 
     ubyte cmap_bytes_entry = 0;
-    uint32 cmap_bytes = 0;
+    uint32_t cmap_bytes = 0;
     
-    uint32 tmp_col = 0;
-    uint32 tmp_int32 = 0;
+    uint32_t tmp_col = 0;
+    uint32_t tmp_int32_t = 0;
     ubyte  tmp_byte = 0;
 
     ubyte alphabits = 0;
 
-    uint32 num_pixels = 0;
+    uint32_t num_pixels = 0;
     
-    uint32 i = 0;
-    uint32 j = 0;
+    uint32_t i = 0;
+    uint32_t j = 0;
 
     ubyte * image_data = 0;
-    uint32 img_dat_len = 0;
+    uint32_t img_dat_len = 0;
 
     ubyte bytes_per_pix = 0;
 
     ubyte true_bits_per_pixel = 0;
 
-    uint32 bytes_total = 0;
+    uint32_t bytes_total = 0;
 
     ubyte packet_header = 0;
     ubyte repcount = 0;
@@ -293,14 +290,14 @@ void * tga_load( const char * filename,
     image_type         = (ubyte)tga_hdr[HDR_IMAGE_TYPE];
     
     cmap_type          = (ubyte)tga_hdr[HDR_CMAP_TYPE];
-    cmap_first         = ttohs( *(uint16 *)(&tga_hdr[HDR_CMAP_FIRST]) );
-    cmap_length        = ttohs( *(uint16 *)(&tga_hdr[HDR_CMAP_LENGTH]) );
+    cmap_first         = ttohs( *(uint16_t *)(&tga_hdr[HDR_CMAP_FIRST]) );
+    cmap_length        = ttohs( *(uint16_t *)(&tga_hdr[HDR_CMAP_LENGTH]) );
     cmap_entry_size    = (ubyte)tga_hdr[HDR_CMAP_ENTRY_SIZE];
 
-    img_spec_xorig     = ttohs( *(uint16 *)(&tga_hdr[HDR_IMG_SPEC_XORIGIN]) );
-    img_spec_yorig     = ttohs( *(uint16 *)(&tga_hdr[HDR_IMG_SPEC_YORIGIN]) );
-    img_spec_width     = ttohs( *(uint16 *)(&tga_hdr[HDR_IMG_SPEC_WIDTH]) );
-    img_spec_height    = ttohs( *(uint16 *)(&tga_hdr[HDR_IMG_SPEC_HEIGHT]) );
+    img_spec_xorig     = ttohs( *(uint16_t *)(&tga_hdr[HDR_IMG_SPEC_XORIGIN]) );
+    img_spec_yorig     = ttohs( *(uint16_t *)(&tga_hdr[HDR_IMG_SPEC_YORIGIN]) );
+    img_spec_width     = ttohs( *(uint16_t *)(&tga_hdr[HDR_IMG_SPEC_WIDTH]) );
+    img_spec_height    = ttohs( *(uint16_t *)(&tga_hdr[HDR_IMG_SPEC_HEIGHT]) );
     img_spec_pix_depth = (ubyte)tga_hdr[HDR_IMG_SPEC_PIX_DEPTH];
     img_spec_img_desc  = (ubyte)tga_hdr[HDR_IMG_SPEC_IMG_DESC];
 
@@ -387,21 +384,21 @@ void * tga_load( const char * filename,
                 fseek( targafile, cmap_first * cmap_bytes_entry, SEEK_CUR );
             }
             
-            tmp_int32 = 0;
+            tmp_int32_t = 0;
             for( j = 0; j < cmap_bytes_entry; j++ ) {
                 if( !fread( &tmp_byte, 1, 1, targafile ) ) {
                     free( colormap );
                     TargaError = TGA_ERR_BAD_COLORMAP;
                     return( NULL );
                 }
-                tmp_int32 += tmp_byte << (j * 8);
+                tmp_int32_t += tmp_byte << (j * 8);
             }
 
             // byte order correct.
-            tmp_int32 = ttohl( tmp_int32 );
+            tmp_int32_t = ttohl( tmp_int32_t );
 
             for( j = 0; j < cmap_bytes_entry; j++ ) {
-                colormap[i * cmap_bytes_entry + j] = (tmp_int32 >> (8 * j)) & 0xFF;
+                colormap[i * cmap_bytes_entry + j] = (tmp_int32_t >> (8 * j)) & 0xFF;
             }
             
         }
@@ -535,21 +532,21 @@ int tga_write_raw( const char * file, int width, int height, unsigned char * dat
 
     FILE * tga;
 
-    uint32 i, j;
+    uint32_t i, j;
 
-    uint32 size = width * height;
+    uint32_t size = width * height;
 
     float red, green, blue, alpha;
 
     char id[] = "written with libtarga";
     ubyte idlen = 21;
     ubyte zeroes[5] = { 0, 0, 0, 0, 0 };
-    uint32 pixbuf;
+    uint32_t pixbuf;
     ubyte one = 1;
     ubyte cmap_type = 0;
     ubyte img_type  = 2;  // 2 - uncompressed truecolor  10 - RLE truecolor
-    uint16 xorigin  = 0;
-    uint16 yorigin  = 0;
+    uint16_t xorigin  = 0;
+    uint16_t yorigin  = 0;
     ubyte  pixdepth = format * 8;  // bpp
     ubyte img_desc;
     
@@ -673,17 +670,17 @@ int tga_write_rle( const char * file, int width, int height, unsigned char * dat
 
     FILE * tga;
 
-    uint32 i, j;
-    uint32 oc, nc;
+    uint32_t i, j;
+    uint32_t oc, nc;
 
     enum RLE_STATE { INIT, NONE, RLP, RAWP };
 
     int state = INIT;
 
-    uint32 size = width * height;
+    uint32_t size = width * height;
 
-    uint16 shortwidth = (uint16)width;
-    uint16 shortheight = (uint16)height;
+    uint16_t shortwidth = (uint16_t)width;
+    uint16_t shortheight = (uint16_t)height;
 
     ubyte repcount;
 
@@ -697,12 +694,12 @@ int tga_write_rle( const char * file, int width, int height, unsigned char * dat
     char id[] = "written with libtarga";
     ubyte idlen = 21;
     ubyte zeroes[5] = { 0, 0, 0, 0, 0 };
-    uint32 pixbuf;
+    uint32_t pixbuf;
     ubyte one = 1;
     ubyte cmap_type = 0;
     ubyte img_type  = 10;  // 2 - uncompressed truecolor  10 - RLE truecolor
-    uint16 xorigin  = 0;
-    uint16 yorigin  = 0;
+    uint16_t xorigin  = 0;
+    uint16_t yorigin  = 0;
     ubyte  pixdepth = format * 8;  // bpp
     ubyte img_desc  = format == TGA_TRUECOLOR_32 ? 8 : 0;
   
@@ -1030,15 +1027,15 @@ int tga_write_rle( const char * file, int width, int height, unsigned char * dat
 
 
 
-static void tga_write_pixel_to_mem( ubyte * dat, ubyte img_spec, uint32 number, 
-                                   uint32 w, uint32 h, uint32 pixel, uint32 format ) {
+static void tga_write_pixel_to_mem( ubyte * dat, ubyte img_spec, uint32_t number, 
+                                   uint32_t w, uint32_t h, uint32_t pixel, uint32_t format ) {
 
     // write the pixel to the data regarding how the
     // header says the data is ordered.
 
-    uint32 j;
-    uint32 x, y;
-    uint32 addy;
+    uint32_t j;
+    uint32_t x, y;
+    uint32_t addy;
 
     switch( (img_spec & 0x30) >> 4 ) {
 
@@ -1076,23 +1073,23 @@ static void tga_write_pixel_to_mem( ubyte * dat, ubyte img_spec, uint32 number,
 
 
 
-static uint32 tga_get_pixel( FILE * tga, ubyte bytes_per_pix, 
+static uint32_t tga_get_pixel( FILE * tga, ubyte bytes_per_pix, 
                             ubyte * colormap, ubyte cmap_bytes_entry ) {
     
     /* get the image data value out */
 
-    uint32 tmp_col;
-    uint32 tmp_int32;
+    uint32_t tmp_col;
+    uint32_t tmp_int32_t;
     ubyte tmp_byte;
 
-    uint32 j;
+    uint32_t j;
 
-    tmp_int32 = 0;
+    tmp_int32_t = 0;
     for( j = 0; j < bytes_per_pix; j++ ) {
         if( fread( &tmp_byte, 1, 1, tga ) < 1 ) {
-            tmp_int32 = 0;
+            tmp_int32_t = 0;
         } else {
-            tmp_int32 += tmp_byte << (j * 8);
+            tmp_int32_t += tmp_byte << (j * 8);
         }
     }
     
@@ -1100,12 +1097,12 @@ static uint32 tga_get_pixel( FILE * tga, ubyte bytes_per_pix,
     switch( bytes_per_pix ) {
         
     case 2:
-        tmp_int32 = ttohs( (uint16)tmp_int32 );
+        tmp_int32_t = ttohs( (uint16_t)tmp_int32_t );
         break;
         
     case 3: /* intentional fall-thru */
     case 4:
-        tmp_int32 = ttohl( tmp_int32 );
+        tmp_int32_t = ttohl( tmp_int32_t );
         break;
         
     }
@@ -1114,10 +1111,10 @@ static uint32 tga_get_pixel( FILE * tga, ubyte bytes_per_pix,
         /* need to look up value to get real color */
         tmp_col = 0;
         for( j = 0; j < cmap_bytes_entry; j++ ) {
-            tmp_col += colormap[cmap_bytes_entry * tmp_int32 + j] << (8 * j);
+            tmp_col += colormap[cmap_bytes_entry * tmp_int32_t + j] << (8 * j);
         }
     } else {
-        tmp_col = tmp_int32;
+        tmp_col = tmp_int32_t;
     }
     
     return( tmp_col );
@@ -1128,7 +1125,7 @@ static uint32 tga_get_pixel( FILE * tga, ubyte bytes_per_pix,
 
 
 
-static uint32 tga_convert_color( uint32 pixel, uint32 bpp_in, ubyte alphabits, uint32 format_out ) {
+static uint32_t tga_convert_color( uint32_t pixel, uint32_t bpp_in, ubyte alphabits, uint32_t format_out ) {
     
     // this is not only responsible for converting from different depths
     // to other depths, it also switches BGR to RGB.
@@ -1211,7 +1208,7 @@ is_15_bit_in_disguise:
 
 
 
-static int16 ttohs( int16 val ) {
+static int16_t ttohs( int16_t val ) {
 
 #ifdef WORDS_BIGENDIAN
     return( ((val & 0xFF) << 8) + (val >> 8) );
@@ -1222,7 +1219,7 @@ static int16 ttohs( int16 val ) {
 }
 
 
-static int16 htots( int16 val ) {
+static int16_t htots( int16_t val ) {
 
 #ifdef WORDS_BIGENDIAN
     return( ((val & 0xFF) << 8) + (val >> 8) );
@@ -1233,7 +1230,7 @@ static int16 htots( int16 val ) {
 }
 
 
-static int32 ttohl( int32 val ) {
+static int32_t ttohl( int32_t val ) {
 
 #ifdef WORDS_BIGENDIAN
     return( ((val & 0x000000FF) << 24) +
@@ -1247,7 +1244,7 @@ static int32 ttohl( int32 val ) {
 }
 
 
-static int32 htotl( int32 val ) {
+static int32_t htotl( int32_t val ) {
 
 #ifdef WORDS_BIGENDIAN
     return( ((val & 0x000000FF) << 24) +
