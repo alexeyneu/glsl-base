@@ -1,6 +1,3 @@
-
-
-
 #include <epoxy/gl.h>
 #include <gtk/gtk.h>
 #include <glm/glm.hpp>
@@ -9,23 +6,16 @@
 #include "libtarga.h"
 #include <locale.h>
 
-
-
-
-
-
 const GLchar *vert_src = R"(
 #version 330
 #extension GL_ARB_explicit_uniform_location : enable
 out vec2 kn;
-out vec4 knn;
-layout(location = 1) in vec2 in_p;
-layout(location = 0) in vec4 in_position;
-layout(location =10)uniform mat4 projection;
+layout(location = 1) in vec2 in_p; // texture
+layout(location = 0) in vec4 in_position; // cube vertexes
+layout(location =10)uniform mat4 projection; // how cube will be viewed
 void main()
 {
 	gl_Position = projection*in_position;
-	knn=in_position ;
 	kn=in_p ;
 //	gl_Position = in_position;
 }
@@ -35,7 +25,6 @@ const GLchar *frag_src =R"(
 #extension GL_ARB_explicit_uniform_location : enable
 layout(location =11)uniform sampler2D t;
 vec4 b;
-in vec4 knn;
 in vec2 kn;
 void main (void)
 {
@@ -45,12 +34,8 @@ void main (void)
 }
 )";
 
-
-
-
 glm::mat4 yt,b;
 GLubyte  *trr;
-
 GLuint gl_vao, gl_buffer, gl_program;
 GLuint vertexT,tpr,tpra;
 static gboolean realise(GtkGLArea *area, GdkGLContext *context)
@@ -61,7 +46,7 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 		printf("failed to initialiize buffers\n");
 		return false;
 	}
-
+/* triangles inside texture , later it cover cube triangles
 	GLfloat t[] =
 	{
 		0.0, 1.0,
@@ -111,7 +96,6 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 		0.0, 0.0,
 		1.0, 1.0
 	};
-
 
 	GLfloat verts[] =
 	{
@@ -175,7 +159,6 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 	frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
 	vert_shader = glCreateShader(GL_VERTEX_SHADER);
 
-
 	glShaderSource(frag_shader, 1, &frag_src, NULL);
 	glShaderSource(vert_shader, 1, &vert_src, NULL);
 
@@ -186,11 +169,7 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 	glAttachShader(gl_program, frag_shader);
 	glAttachShader(gl_program, vert_shader);
 	glLinkProgram(gl_program);
-
-	// glUniformMatrix4fv(1, 1, 0, glm::value_ptr(b));
-
 	glGenVertexArrays(1, &gl_vao);
-
 	glBindVertexArray(gl_vao);
 
 	glGenBuffers(1, &gl_buffer);
@@ -199,7 +178,6 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
 
 	glGenBuffers(1, &tpr);
 	glBindBuffer(GL_ARRAY_BUFFER,tpr );
@@ -253,7 +231,3 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-
-
-
-
