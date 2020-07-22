@@ -46,7 +46,7 @@ static gboolean realise(GtkGLArea *area, GdkGLContext *context)
 		printf("failed to initialiize buffers\n");
 		return false;
 	}
-/* triangles inside texture , later it cover cube triangles
+// triangles inside texture , later it cover cube triangles
 	GLfloat t[] =
 	{
 		0.0, 1.0,
